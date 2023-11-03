@@ -10,11 +10,15 @@ from utils.utils import get_network
 
 cfg = get_val_cfg(cfg, split="test", copy=False)
 
+print(cfg.__dict__)
+
 assert cfg.ckpt_path, "Please specify the path to the model checkpoint"
 model_name = os.path.basename(cfg.ckpt_path).replace(".pth", "")
 dataset_root = cfg.dataset_root  # keep it
 rows = []
 print(f"'{cfg.exp_name}:{model_name}' model testing on...")
+
+print("dataset root", cfg.dataset_root)
 
 for i, dataset in enumerate(cfg.datasets_test):
     cfg.dataset_root = os.path.join(dataset_root, dataset)

@@ -51,14 +51,22 @@ def validate(model: nn.Module, cfg: CONFIGCLASS):
             predict = model(in_tens, meta).sigmoid()
             y_pred.extend(predict.flatten().tolist())
             y_true.extend(label.flatten().tolist())
+            
 
     y_true, y_pred = np.array(y_true), np.array(y_pred)
+    
+    comparison = []
+    for yi_true, yi_pred in zip(list(y_true), list(y_pred)):
+        comparison.append(f"{yi_true} vs {yi_pred:.8f}")
+    print(comparison)
     r_acc = accuracy_score(y_true[y_true == 0], y_pred[y_true == 0] > 0.5)
     f_acc = accuracy_score(y_true[y_true == 1], y_pred[y_true == 1] > 0.5)
     acc = accuracy_score(y_true, y_pred > 0.5)
+    acc01 = accuracy_score(y_true, y_pred > 0.01)
     ap = average_precision_score(y_true, y_pred)
     results = {
         "ACC": acc,
+        "ACC (>0.01)": acc01,
         "AP": ap,
         "R_ACC": r_acc,
         "F_ACC": f_acc,
